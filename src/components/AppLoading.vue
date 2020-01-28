@@ -51,22 +51,24 @@ export default {
   },
   data: () => ({
     hidden: false,
-    scaleInterval: null
+    logoWidth: 250,
+    logoHeight: 150,
+    scaleInterval: null,
+    defaultLogoWidth: 250,
+    defaultLogoHeight: 150
   }),
   methods: {
     updateMaskSvgPositions () {
       const mainMaskContainer = document.getElementById('main-mask-container')
       if (mainMaskContainer && !this.loading) {
-        const maskLogo = document.getElementById('mask-logo')
         const maskLogoContainer = document.getElementById('mask-logo-container')
-        const maskLogoBounds = maskLogo.getBoundingClientRect()
         const mainMaskContainerBounds = mainMaskContainer.getBoundingClientRect()
 
         mainMaskContainer.setAttribute('width', window.innerWidth)
         mainMaskContainer.setAttribute('height', window.innerHeight)
 
-        maskLogoContainer.setAttribute('x', (mainMaskContainerBounds.width - maskLogoBounds.width) / 2)
-        maskLogoContainer.setAttribute('y', (mainMaskContainerBounds.height - maskLogoBounds.height) / 2)
+        maskLogoContainer.setAttribute('x', (mainMaskContainerBounds.width - this.logoWidth) / 2)
+        maskLogoContainer.setAttribute('y', (mainMaskContainerBounds.height - this.logoHeight) / 2)
       }
     },
     fadeOutLogo() {
@@ -79,18 +81,22 @@ export default {
         let targetScale = (window.innerHeight * 4) / 150
 
         this.scaleInterval = setInterval(() => {
-          const maskLogoBounds = maskLogo.getBoundingClientRect()
+          this.logoWidth = currentScale * this.defaultLogoWidth
+          this.logoHeight = currentScale * this.defaultLogoHeight
+
           const mainMaskContainerBounds = mainMaskContainer.getBoundingClientRect()
 
           maskLogo.setAttribute('transform', `scale(${currentScale})`)
-          maskLogoContainer.setAttribute('x', (mainMaskContainerBounds.width - maskLogoBounds.width) / 2)
-          maskLogoContainer.setAttribute('y', (mainMaskContainerBounds.height - maskLogoBounds.height) / 2)
+          maskLogoContainer.setAttribute('x', (mainMaskContainerBounds.width - this.logoWidth) / 2)
+          maskLogoContainer.setAttribute('y', (mainMaskContainerBounds.height - this.logoHeight) / 2)
 
           currentScale += 0.07
           if (currentScale > targetScale) {
             clearInterval(this.scaleInterval)
             this.hidden = true
             this.scaleInterval = null
+            this.logoWidth = this.defaultLogoWidth
+            this.logoHeight = this.defaultLogoHeight
           }
         }, 2)
       }
