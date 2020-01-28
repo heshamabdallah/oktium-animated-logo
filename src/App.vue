@@ -1,28 +1,45 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div>{{ dummyText }}</div>
+    <app-loading v-model="loadingStatus" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import { mapState, mapMutations } from 'vuex'
+import AppLoading from './components/AppLoading.vue'
 export default {
   name: 'app',
+  computed: {
+    ...mapState([
+      'loadingStatus'
+    ]),
+    dummyText () {
+      return ('Lorem ipsum is placeholder text commonly used in the graphic and publishing. ').repeat(100)
+    }
+  },
+  methods: {
+    ...mapMutations([
+      'setLoadingStatus'
+    ])
+  },
+  created() {
+    // Simulate AJAX request
+    this.setLoadingStatus(true)
+    setTimeout(() => {
+      this.setLoadingStatus(false)
+    }, 2000)
+  },
   components: {
-    HelloWorld
+    AppLoading
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+body {
+  margin: 0;
+  padding: 15px;
+  background: #ddd;
 }
 </style>

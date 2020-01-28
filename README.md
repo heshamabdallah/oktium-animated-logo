@@ -1,4 +1,4 @@
-# oktium-animated-logo
+# animation
 
 ## Project setup
 ```
